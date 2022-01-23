@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Switch, Route, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Price from "./Price";
+import Chart from "./Chart";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -13,6 +15,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.h1`
@@ -23,6 +26,33 @@ const Title = styled.h1`
 
 const Loading = styled.div`
   align-items: center;
+`;
+
+const Overview = styled.div`
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 5px;
+`;
+
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span:first-child {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+`;
+
+const Description = styled.p`
+  text-align: center;
+  margin: 15px 0;
+  padding: 0 20px;
+  line-height: 1.2;
 `;
 
 interface RouteParams {
@@ -104,14 +134,53 @@ function Coin() {
       ).json();
       setInfo(infoData);
       setPriceInfo(priceData);
+      setLoading((prev) => !prev);
     })();
-  }, []);
+  }, [coinId]);
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading..."}</Title>
+        <Title>
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
       </Header>
-      {loading ? <Loading>Loading...</Loading> : null}
+      {loading ? (
+        <Loading>Loading...</Loading>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>RANK</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>SYMBOL</span>
+              <span>{info?.symbol}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>
+            {info?.description ? info.description : "No description provided"}
+          </Description>
+          <Overview>
+            <OverviewItem>
+              <span>TOTAL SUPPLY</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
+        </>
+      )}
     </Container>
   );
 }
