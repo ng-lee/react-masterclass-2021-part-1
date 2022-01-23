@@ -79,6 +79,7 @@ const Tab = styled.div<{ isActive: boolean }>`
   background-color: rgba(0, 0, 0, 0.6);
   padding: 10px 0;
   border-radius: 5px;
+  text-transform: uppercase;
   color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.textColor};
 `;
