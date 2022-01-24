@@ -50,6 +50,8 @@ function Chart({ coinId }: ChartProps) {
               curve: "smooth",
             },
             xaxis: {
+              type: "datetime",
+              categories: data?.map((price) => price.time_close),
               labels: {
                 show: false,
               },
@@ -62,6 +64,11 @@ function Chart({ coinId }: ChartProps) {
                 lines: {
                   show: false,
                 },
+              },
+            },
+            tooltip: {
+              y: {
+                formatter: (value) => `$${value.toFixed(5)}`,
               },
             },
           }}
