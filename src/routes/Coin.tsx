@@ -86,6 +86,10 @@ const Tab = styled.div<{ isActive: boolean }>`
     props.isActive ? props.theme.accentColor : props.theme.textColor};
 `;
 
+const Result = styled.div`
+  margin-top: 20px;
+`;
+
 interface RouteParams {
   coinId: string;
 }
@@ -209,14 +213,16 @@ function Coin() {
             </Link>
           </Tabs>
 
-          <Switch>
-            <Route path={`/${coinId}/price`}>
-              <Price />
-            </Route>
-            <Route path={`/${coinId}/chart`}>
-              <Chart coinId={coinId} />
-            </Route>
-          </Switch>
+          <Result>
+            <Switch>
+              <Route path={`/${coinId}/price`}>
+                <Price />
+              </Route>
+              <Route path={`/${coinId}/chart`}>
+                <Chart coinId={coinId} />
+              </Route>
+            </Switch>
+          </Result>
         </>
       )}
     </Container>
